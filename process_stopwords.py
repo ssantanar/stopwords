@@ -11,20 +11,15 @@ def acentos(word):
     word = re.compile(r'\W*\b\w{1,1}\b').sub('', word)
     word = re.sub(r'\s+',' ',word)
     return word
-
+# librerias
+import pandas as pd
 # read stopwords
 f = open("stopwords_spanish.txt", 'r')
 x = f.readlines()
 f.close()
 # delete \n
 stopwords = [line.rstrip('\n') for line in x]
-stopwords = [acentos(stopword) for stopword in stopwords]
-
+stopwords = [acentos(stopword) for stopword in stopwords if acentos(stopword) != '']
+stopwords = pd.DataFrame({'stopwords_spanish':stopwords})
 # export
-with open('stopwords_spanish.txt', 'w') as f:
-    for item in stopwords:
-        # write words 
-        if item != '':
-            f.write("%s\n" % item)
-        else:
-            pass
+stopwords.to_csv("stopwords_spanish.csv", sep=",", encoding="utf-8", index=False)
